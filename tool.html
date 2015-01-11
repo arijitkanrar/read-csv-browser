@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Read CSV in web page
+		</title>
+		<script type="text/javascript" src="../jquery/jquery-2.1.3.js"></script>
+		<script type="text/javascript" src="./libs/PapaParse-4.0.7/papaparse.min.js"></script>
+		<style type="text/css">
+			.container{
+				align: center;
+				font-family: Arial;
+				height: 400px;
+				width: 100%;
+			}
+			.dropArea{
+				border: 2px dashed #7AB5EC;
+				width: 60%;
+				height: 100%;
+				margin: 0 auto;
+				
+				text-align: center;
+				padding-top: 50px;
+			}
+			.dropAreaHighlighted{
+				border: 3px dashed #3790E2;
+				width: 60%;
+				height: 100%;
+				margin: 0 auto;
+				
+				text-align: center;
+				padding-top: 50px;
+			}
+			.emptyDiv{
+				height:150px;
+			}
+		</style>
+		<script type="text/javascript">
+			function handleDragEnter(ev){
+				ev.preventDefault();
+				$('#dropAreaDiv').attr('class','dropAreaHighlighted');
+				console.log('handleDragEnter called...');
+			}
+			
+			function handleDragLeave(ev){
+				ev.preventDefault();
+				$('#dropAreaDiv').attr('class','dropArea');
+				console.log('handleDragLeave called...');
+			}
+			
+			function handleDragOver(ev){
+				ev.preventDefault();
+				console.log('handleDragOver called...');
+			}
+			
+			function handleDrop(ev){
+				ev.originalEvent.preventDefault();
+				console.log('handleDrop called...');
+				var dt = ev.originalEvent.dataTransfer;
+				var files = dt.files;
+				var fileConfig = {
+						delimiter: ",",
+						newline: "",
+						header: true,
+						dynamicTyping: true,
+						preview: 0,
+						encoding: "",
+						worker: false,
+						comments: false,
+						complete: parseComplete,
+						error: parseError,
+						download: false,
+						skipEmptyLines: false,
+						fastMode: true,
+					};
+						
+				
+				for(i=0;i<files.length;i++){
+					var f = files[i];
+					//console.log('Dropped file: ' + f);
+						
+					Papa.parse(f,fileConfig);
+									
+				}
+			}
+			
+			function parseError(err, file){
+				console.log('There was an error while parsing... ' + err.message);
+			}
+			
+			function parseComplete(results, file){
+				console.log('Parsing complete...');
+			}
+			
+			$(document).ready(function(){
+				$('#dropAreaDiv').bind('dragenter',handleDragEnter);
+				$('#dropAreaDiv').bind('dragover',handleDragOver);
+				$('#dropAreaDiv').bind('dragleave',handleDragLeave);
+				$('#dropAreaDiv').bind('drop',handleDrop);
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="emptyDiv">
+			</div>
+			<div class="dropArea" id="dropAreaDiv">
+				Drop a file here...
+			</div class="emptyDiv">
+			</div>
+			<div
+		</div>
+	</body>
+</html>
